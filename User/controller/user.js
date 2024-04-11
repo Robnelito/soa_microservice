@@ -17,8 +17,7 @@ const isExistingUser = async (user_email) => {
     }
   })
 
-  if (user) return true;
-  else return false
+  return !!user;
 }
 const register = async (req, res) => {
   if (!req.body.user_firstname || !req.body.user_email) {
