@@ -57,7 +57,7 @@ const connexion = async (req, res) => {
 
   bcrypt.compare(req.body.user_password, user.user_password, function (err, result) {
     if (result === true) {
-      let token = jwt.sign(user, 'test')
+      let token = jwt.sign(user, process.env.JWT_SECRET)
       res.json({token, user})
     } else {
       res.json({tag: "error", message: "Mot de passe incorrect"})
