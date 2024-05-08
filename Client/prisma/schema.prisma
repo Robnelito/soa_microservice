@@ -21,4 +21,5 @@ model Clients {
     phoneNumberClient String
     addressClient     String
     remnantsClient    Float
+    accountNumberClient String @unique
 }
