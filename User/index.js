@@ -13,9 +13,10 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-app.get('/', userRoute.root)
+app.get('/', userRoute.getAll)
 app.post('/', userRoute.register)
 app.post('/login', userRoute.connexion)
+app.delete('/:user_id', userRoute.remove)
 
 app.listen(PORT, () => {
     console.log(`user listen on port ${PORT}`);

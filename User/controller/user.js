@@ -3,13 +3,13 @@ const {v4: uuidv4} = require('uuid');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
-const {isExistingUser, registerUser, connexionUser} = require("../model/user");
+const {isExistingUser, registerUser, connexionUser, removeUser} = require("../model/user");
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds);
 
 const prisma = new PrismaClient()
 
-const root = async (req, res) => {
+const getAll = async (req, res) => {
   const allUsers = await prisma.user.findMany();
   return res.json(allUsers);
 }
@@ -65,8 +65,20 @@ const connexion = async (req, res) => {
   });
 }
 
+const remove = async (req, res) => {
+
+  if (!await isExistingUser('', req.params.user_id)) {
+    res.json({tag: 'error', message: "user don't exist or already deleted"})
+    return
+  }
+
+  const user = await removeUser(req.params.user_id)
+  res.json(user)
+}
+
 module.exports = {
-  root,
+  getAll,
   register,
-  connexion
+  connexion,
+  remove
 };

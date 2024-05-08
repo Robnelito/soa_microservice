@@ -2,10 +2,17 @@ const {PrismaClient} = require("@prisma/client");
 
 const prisma = new PrismaClient()
 
-const isExistingUser = async (user_email) => {
+const isExistingUser = async (user_email = '', user_id = '') => {
   const user = await prisma.user.findFirst({
     where: {
-      user_email: user_email
+      OR: [
+        {
+          user_email: user_email,
+        },
+        {
+          user_id: user_id
+        }
+      ]
     }
   })
 
@@ -26,8 +33,17 @@ const connexionUser = async (user_email) => {
   })
 }
 
+const removeUser = async (user_id) => {
+  return prisma.user.delete({
+    where: {
+      user_id: user_id
+    }
+  })
+}
+
 module.exports = {
   isExistingUser,
   registerUser,
   connexionUser,
+  removeUser
 }
