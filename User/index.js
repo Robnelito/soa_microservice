@@ -15,6 +15,7 @@ app.use(bodyParser.json());
 
 app.get('/', userRoute.root)
 app.post('/', userRoute.register)
+app.post('/login', userRoute.connexion)
 
 app.listen(PORT, () => {
     console.log(`user listen on port ${PORT}`);
