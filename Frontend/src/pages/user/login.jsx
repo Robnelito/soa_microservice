@@ -1,12 +1,23 @@
 import {useState} from "react";
+import axios from "axios";
+import configs from "../../../config.js";
+import {useNavigate} from "react-router-dom";
 
 function Login() {
   const [seePassword, setSeePassword] = useState(false)
-  const [userInfo, setUserInfo] = useState({identifiant: '', password: ''})
+  const [userInfo, setUserInfo] = useState({user_email: '', user_password: ''})
+
+  const navigate = useNavigate()
 
   const connect = (e) => {
     e.preventDefault()
-    alert('coco')
+    axios.post(`${configs.API_GATEWAY_URL}/user/login`, userInfo).then(res => {
+      localStorage.setItem("token", res.data.token)
+      localStorage.setItem("user", res.data.user)
+      navigate('/dashboard')
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   return (
@@ -22,7 +33,7 @@ function Login() {
           <div className={''}>
             <label htmlFor="identifiant">Identifiant ou email</label>
             <input onChange={(e) => {
-              setUserInfo({...userInfo, identifiant: e.target.value})
+              setUserInfo({...userInfo, user_email: e.target.value})
             }} type="text"
                    id={'identifiant'} name={'identifiant'}
                    className={'block border w-full rounded-md p-2'}/>
@@ -30,7 +41,7 @@ function Login() {
           <div className={''}>
             <label htmlFor="password">Mot de passe</label>
             <input onChange={(e) => {
-              setUserInfo({...userInfo, password: e.target.value})
+              setUserInfo({...userInfo, user_password: e.target.value})
             }} type={seePassword ? "text" : "password"} id={'password'} name={'password'}
                    className={'block border w-full rounded-md p-2'}/>
           </div>

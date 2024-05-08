@@ -7,6 +7,7 @@ import {
 import './index.css'
 import Login from "./pages/user/login.jsx";
 import Client from "./pages/client/Index.jsx";
+import MainLayout from "./layouts/mainLayout.jsx";
 
 const router = createBrowserRouter([
   {
@@ -14,8 +15,14 @@ const router = createBrowserRouter([
     element: <Login/>,
   },
   {
-    path: "/client",
-    element: <Client/>
+    path: "/dashboard",
+    element: <MainLayout/>,
+    children: [
+      {
+        path: "/client",
+        element: <Client/>
+      },
+    ]
   }
 ]);
 
