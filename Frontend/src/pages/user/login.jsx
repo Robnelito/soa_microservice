@@ -13,8 +13,7 @@ function Login() {
     e.preventDefault()
     axios.post(`${configs.API_GATEWAY_URL}/user/login`, userInfo).then(res => {
       localStorage.setItem("token", res.data.token)
-      localStorage.setItem("user", res.data.user)
-      navigate('/dashboard')
+      navigate('/dashboard/client')
     }).catch(err => {
       console.log(err)
     })
