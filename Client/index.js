@@ -13,11 +13,11 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-app.post('/clients', clients.createClient);
-app.get('/clients', clients.getClients);
-app.get('/client/:idClient', clients.getClientById);
-app.put('/client/:idClient', clients.updateClient);
-app.delete('/client/:idClient', clients.deleteClient);
+app.post('/', clients.createClient);
+app.get('/', clients.getClients);
+app.get('/:idClient', clients.getClientById);
+app.put('/:idClient', clients.updateClient);
+app.delete('/:idClient', clients.deleteClient);
 
 app.listen(PORT, () => {
   console.log(`client listen on port ${PORT}`);
