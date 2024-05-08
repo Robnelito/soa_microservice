@@ -2,8 +2,22 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 const { v4: uuidv4 } = require('uuid');
 
+function generateAccountNumber() {
+    let accountNumber = '';
+    const characters = '0123456789';
+    const length = 15; // Longueur du numéro de compte
+
+    for (let i = 0; i < length; i++) {
+        accountNumber += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return accountNumber;
+}
+
 const createClient = async(req, res) => {
-    const { firstnameClient, lastnameClient, mailClient, phoneNumberClient, addressClient, remnantsClient } = req.body;
+    const { firstnameClient, lastnameClient, mailClient, phoneNumberClient, addressClient, remnantsClient, accountNumberClient } = req.body;
+    const num_compte = generateAccountNumber();
+
     try {
         const newClient = await prisma.clients.create({
             data: {
@@ -13,7 +27,8 @@ const createClient = async(req, res) => {
                 mailClient,
                 phoneNumberClient,
                 addressClient,
-                remnantsClient
+                remnantsClient,
+                accountNumberClient: num_compte
             }
         });
         res.json(newClient);
