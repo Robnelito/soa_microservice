@@ -6,9 +6,9 @@ const PORT = 3001
 const userRoute = require('./controller/user')
 
 app.use(cors({
-    origin: '*',
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true,
+  origin: '*',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
 }));
 
 app.use(bodyParser.json());
@@ -19,5 +19,5 @@ app.post('/login', userRoute.connexion)
 app.delete('/:user_id', userRoute.remove)
 
 app.listen(PORT, () => {
-    console.log(`user listen on port ${PORT}`);
+  console.log(`user listen on port ${PORT}`);
 })
