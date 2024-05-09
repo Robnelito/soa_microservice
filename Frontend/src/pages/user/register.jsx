@@ -18,7 +18,7 @@ function Register() {
 
   const connect = (e) => {
     e.preventDefault()
-    axios.post(`${configs.API_GATEWAY_URL}/user/`, userInfo).then(res => {
+    axios.post(`${configs.API_GATEWAY_URL}/user/`, userInfo).then(() => {
       navigate('/')
     }).catch(err => {
       console.log(err)
