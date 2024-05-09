@@ -14,12 +14,12 @@ datasource db {
 }
 
 model Clients {
-    idClient          String @id @default(uuid())
-    firstnameClient   String
-    lastnameClient    String
-    mailClient        String @unique
-    phoneNumberClient String
-    addressClient     String
-    remnantsClient    Float
+    idClient            String @id @default(uuid())
+    firstnameClient     String
+    lastnameClient      String
+    mailClient          String @unique
+    phoneNumberClient   Int    @unique
+    addressClient       String
+    remnantsClient      Float
     accountNumberClient String @unique
 }
