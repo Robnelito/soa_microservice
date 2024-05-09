@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import configs from "../../../config.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Login() {
   const [seePassword, setSeePassword] = useState(false)
@@ -21,7 +21,7 @@ function Login() {
 
   return (
     <div className={'h-dvh w-dvw flex justify-center place-items-center'}>
-      <div className={'p-4 border rounded-md space-y-2'}>
+      <div className={'p-4 border w-1/2 rounded-md space-y-2'}>
         <div>
           <h1 className={'font-black text-2xl'}>Connexion</h1>
           <p className={'text-sm text-gray-600 font-light'}>Connexion à l&apos;application de gestion de virement
@@ -58,6 +58,9 @@ function Login() {
             </button>
           </div>
         </form>
+        <div>
+          Pas encore de compte ? <Link to={'/register'} className={'font-bold'}> Créer un compte </Link>.
+        </div>
       </div>
     </div>
   )

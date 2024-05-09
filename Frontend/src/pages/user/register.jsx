@@ -1,7 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
 import configs from "../../../config.js";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 function Register() {
 
@@ -27,10 +27,10 @@ function Register() {
 
   return (
     <div className={'h-dvh w-dvw flex justify-center place-items-center'}>
-      <div className={'p-4 border rounded-md space-y-2'}>
+      <div className={'p-4 border w-1/2 rounded-md space-y-2'}>
         <div>
           <h1 className={'font-black text-2xl'}>Creation de compte</h1>
-          <p className={'text-sm text-gray-600 font-light'}>Creation de compte utilisateur.</p>
+          <p className={'text-sm text-gray-600 font-light'}>Création de compte utilisateur</p>
           <hr/>
         </div>
         <form onSubmit={connect} className={' space-y-2'}>
@@ -79,6 +79,9 @@ function Register() {
             </button>
           </div>
         </form>
+        <div>
+          <Link to={'/'} className={'font-bold'}>J&apos;ai déjà un compte.</Link>
+        </div>
       </div>
     </div>
   )
