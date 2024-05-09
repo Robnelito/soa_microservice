@@ -1,0 +1,22 @@
+meta {
+  name: POST
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:3000/client/
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstnameClient": "Hasina",
+    "lastnameClient": "RAHARISON",
+    "mailClient": "hasinatiana@gmail.com",
+    "phoneNumberClient": 341111238,
+    "addressClient": "Antarandolo",
+    "remnantsClient": 12000
+  }
+}
