@@ -8,11 +8,16 @@ import './index.css'
 import Login from "./pages/user/login.jsx";
 import Client from "./pages/client/Index.jsx";
 import MainLayout from "./layouts/mainLayout.jsx";
+import Register from "./pages/user/register.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Login/>,
+  },
+  {
+    path: "/register",
+    element: <Register/>,
   },
   {
     path: "/dashboard",

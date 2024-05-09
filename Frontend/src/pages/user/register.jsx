@@ -3,17 +3,23 @@ import axios from "axios";
 import configs from "../../../config.js";
 import {Link, useNavigate} from "react-router-dom";
 
-function Login() {
+function Register() {
+
   const [seePassword, setSeePassword] = useState(false)
-  const [userInfo, setUserInfo] = useState({user_email: '', user_password: ''})
+
+  const [userInfo, setUserInfo] = useState({
+    user_firstname: '',
+    user_lastname: '',
+    user_email: '',
+    user_password: ''
+  })
 
   const navigate = useNavigate()
 
   const connect = (e) => {
     e.preventDefault()
-    axios.post(`${configs.API_GATEWAY_URL}/user/login`, userInfo).then(res => {
-      localStorage.setItem("token", res.data.token)
-      navigate('/dashboard/client')
+    axios.post(`${configs.API_GATEWAY_URL}/user/`, userInfo).then(() => {
+      navigate('/')
     }).catch(err => {
       console.log(err)
     })
@@ -23,14 +29,29 @@ function Login() {
     <div className={'h-dvh w-dvw flex justify-center place-items-center'}>
       <div className={'p-4 border w-1/2 rounded-md space-y-2'}>
         <div>
-          <h1 className={'font-black text-2xl'}>Connexion</h1>
-          <p className={'text-sm text-gray-600 font-light'}>Connexion à l&apos;application de gestion de virement
-            bancaire.</p>
+          <h1 className={'font-black text-2xl'}>Creation de compte</h1>
+          <p className={'text-sm text-gray-600 font-light'}>Création de compte utilisateur</p>
           <hr/>
         </div>
         <form onSubmit={connect} className={' space-y-2'}>
           <div className={''}>
-            <label htmlFor="identifiant">Identifiant ou email</label>
+            <label htmlFor="identifiant">Nom(s)</label>
+            <input onChange={(e) => {
+              setUserInfo({...userInfo, user_firstname: e.target.value})
+            }} type="text"
+                   id={'identifiant'} name={'identifiant'}
+                   className={'block border w-full rounded-md p-2'}/>
+          </div>
+          <div className={''}>
+            <label htmlFor="identifiant">Prénom(s)</label>
+            <input onChange={(e) => {
+              setUserInfo({...userInfo, user_lastname: e.target.value})
+            }} type="text"
+                   id={'identifiant'} name={'identifiant'}
+                   className={'block border w-full rounded-md p-2'}/>
+          </div>
+          <div className={''}>
+            <label htmlFor="identifiant">Email</label>
             <input onChange={(e) => {
               setUserInfo({...userInfo, user_email: e.target.value})
             }} type="text"
@@ -59,11 +80,11 @@ function Login() {
           </div>
         </form>
         <div>
-          Pas encore de compte ? <Link to={'/register'} className={'font-bold'}> Créer un compte </Link>.
+          <Link to={'/'} className={'font-bold'}>J&apos;ai déjà un compte.</Link>
         </div>
       </div>
     </div>
   )
 }
 
-export default Login
+export default Register
