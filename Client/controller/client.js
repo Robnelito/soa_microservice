@@ -76,9 +76,9 @@ const updateClient = async(req, res) => {
                 lastnameClient,
                 firstnameClient,
                 mailClient,
-                phoneNumberClient,
+                phoneNumberClient: parseInt(phoneNumberClient),
                 addressClient,
-                remnantsClient
+                remnantsClient: parseFloat(remnantsClient)
             }
         });
         res.json(upClient);
