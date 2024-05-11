@@ -5,15 +5,26 @@ import axios from 'axios';
 import configs from '../../../config'
 
 const Index = () => {
-    const [clients, setClient] = useState('');
+    const [clients, setClient] = useState([]);
     const [search, setSearch] = useState('');
-    const initialForm = {
-        firstnameClient: '',
+    const [showAddModal, setShowAddModal] = useState(false);
+
+    const openAddModal = () => {
+        setShowAddModal(true);
+    };
+
+    const closeAddModal = () => {
+        setShowAddModal(false);
+    };
+
+    const initialFormState = {
         lastnameClient: '',
+        firstnameClient: '',
         mailClient: '',
         phoneNumberClient: '',
-        addressClient: ''
-    };
+        addressClient: '',
+        remnantsClient: ''
+    }
 
     useEffect(() => {
         axios.get(`${configs.API_GATEWAY_URL}/client/`).then((response) => {
@@ -24,18 +35,33 @@ const Index = () => {
         })
     }, []);
 
-    const [formData, setFormData] = useState({ initialForm });
+    const [formData, setFormData] = useState(initialFormState);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     try {
-    //         await
-    //     }
-    // }
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(formData);
+        axios.post(`${configs.API_GATEWAY_URL}/client/`, formData).then((response) => {
+            setFormData(initialFormState);
+            closeAddModal();
+            setClient(response.data);
+            alert('succes');
+        }).catch((error) => {
+            console.error(error);
+            alert(error);
+        })
+    };
+
+    const handleDelete = (clientId) => {
+        axios.delete(`${configs.API_GATEWAY_URL}/client/${clientId}`).then(() => {
+            setClient(clients.filter(client => client.idClient !== clientId));
+        }).catch((error) => {
+            console.error(error);
+        })
+    };
 
     function nbr(a, b) {
         a = '' + a;
@@ -84,24 +110,89 @@ const Index = () => {
 
     return (
         <>
-            <div className='space-x-2 pb-2 flex justify-end'>
-                <input type="text" className="border border-slate-600 rounded py-2 px-4 w-96" placeholder="Faites votre recherche ici..." onChange={(e) => setSearch(e.target.value)} autocomplete="off" />
-                <button className='py-2 px-4 bg-gradient-to-br from-gray-600 via-gray-500 to-gray-600 rounded text-white'>Ajouter</button>
+            <div className='space-x-2 pb-2 flex justify-between'>
+                <span className='uppercase'>Liste des clients</span>
+                <div className='space-x-2'>
+                    <input type="text" className="border border-slate-600 rounded py-2 px-4 w-96" placeholder="Faites votre recherche ici..." onChange={(e) => setSearch(e.target.value)} autocomplete="off" />
+                    <button className='py-2 px-4 bg-gradient-to-br from-gray-600 via-gray-500 to-gray-600 rounded text-white' onClick={openAddModal}>Ajouter</button>
+                </div>
             </div>
+            {showAddModal && (
+                <>
+                    <div className="fixed inset-0 flex items-center justify-center h-screen z-50 bg-gray-800 bg-opacity-50">
+                    </div>
+                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                        <div className="flex justify-center items-center w-[40%]">
+                            <form onSubmit={handleSubmit} className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
+                                <div className='grid grid-cols-2 gap-2 justify-between'>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="lastnameClient">Nom:</label>
+                                        <input type="text" name="lastnameClient" placeholder="Nom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.lastnameClient} onChange={handleChange} required />
+                                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="firstnameClientClient">Prénom:</label>
+                                        <input type="text" name="firstnameClient" placeholder="Prénom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.firstnameClient} onChange={handleChange} required />
+                                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="mailClient">Adresse e-mail:</label>
+                                        <input type="email" name="mailClient" placeholder="exemple@mail.com" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.mailClient} onChange={handleChange} required />
+                                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="phoneNumberClient">Numéro de téléhone:</label>
+                                        <div className='flex items-center'>
+                                            <span className='p-2 border border-slate-300 rounded-l bg-slate-200 text-slate-800'>+261</span>
+                                            <input type="text" name="phoneNumberClient" placeholder="3X XX XXX XX" className='border border-gray-600 p-2 rounded-r w-full focus:ring-1 focus:ring-gray-700' maxLength={9} value={formData.phoneNumberClient} onChange={handleChange} required />
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="lastnameClient">Adresse:</label>
+                                        <input type="text" name="addressClient" placeholder="Adresse" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.addressClient} onChange={handleChange} required />
+                                    </div>
+                                    <div className='flex flex-col w-full'>
+                                        <label htmlFor="lastnameClient">Solde:</label>
+                                        <input type="text" name="remnantsClient" placeholder="Solde" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.remnantsClient} onChange={handleChange} required />
+                                    </div>
+                                </div>
+                                <div className='flex justify-end space-x-2'>
+                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeAddModal}>Annuler</button>
+                                    <button type="submit" className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105'>Valider</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </>
+            )}
             <div className='flex flex-wrap justify-center gap-4'>
                 {
-                    clients && clients.filter((index) => {
-                        return search.toLowerCase() === ''
-                            ? index
-                            : index.firstnameClient.toLowerCase().includes(search) ||
-                            index.lastnameClient.toLowerCase().includes(search);
-                    }).map((content) => (
+                    clients && clients.map((content) => (
                         <>
                             <div className="bg-gradient-to-br from-gray-800 via-gray-600 to-gray-800 w-80 h-48 p-4 rounded-md shadow shadow-slate-600 transition-all duration-200 hover:scale-105 *:text-white" key={content.idClient}>
                                 <div className="space-y-1">
-                                    <div className=''>
-                                        <p className="flex justify-end">+261 {nbr(nbr1(nbr2(content.phoneNumberClient)))}</p>
-                                        <p className="flex justify-end">{content.mailClient}</p>
+                                    <div className='flex justify-between'>
+                                        <div className=''>
+                                            <button className='hover:bg-green-600 rounded-full p-1'>
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path d="M18.9445 9.1875L14.9445 5.1875M18.9445 9.1875L13.946 14.1859C13.2873 14.8446 12.4878 15.3646 11.5699 15.5229C10.6431 15.6828 9.49294 15.736 8.94444 15.1875C8.39595 14.639 8.44915 13.4888 8.609 12.562C8.76731 11.6441 9.28735 10.8446 9.946 10.1859L14.9445 5.1875M18.9445 9.1875C18.9445 9.1875 21.9444 6.1875 19.9444 4.1875C17.9444 2.1875 14.9445 5.1875 14.9445 5.1875M20.5 12C20.5 18.5 18.5 20.5 12 20.5C5.5 20.5 3.5 18.5 3.5 12C3.5 5.5 5.5 3.5 12 3.5" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                            <button className='hover:bg-red-600 rounded-full p-1' onClick={() => handleDelete(content.idClient)}>
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path d="M14 9.5C14 9.5 14.5 10.5 14.5 12.5C14.5 14.5 14 15.5 14 15.5M10 9.5C10 9.5 9.5 10.5 9.5 12.5C9.5 14.5 10 15.5 10 15.5M5.99999 6C5.99999 11.8587 4.63107 20 12 20C19.3689 20 18 11.8587 18 6M4 6H20M15 6V5C15 3.22496 13.3627 3 12 3C10.6373 3 9 3.22496 9 5V6" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <div className='flex justify-end flex-col'>
+                                            <p className="flex justify-end">+261 {nbr(nbr1(nbr2(content.phoneNumberClient)))}</p>
+                                            <p className="flex justify-end">{content.remnantsClient.toLocaleString("de-DE")} MGA</p>
+                                        </div>
                                     </div>
                                     <div className='flex justify-between px-6 items-center'>
                                         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="40px" height="40px" viewBox="0 0 50 50" xmlSpace="preserve">
@@ -113,7 +204,7 @@ const Index = () => {
                                     </div>
                                     <p className="flex justify-start pl-4">{nbr(nbr2(content.accountNumberClient))}</p>
                                     <div className='flex justify-between px-4 items-center'>
-                                        <p className="text-md">{content.lastnameClient} {content.firstnameClient}</p>
+                                        <p className="text-md">{content.lastnameClient.toUpperCase()} {content.firstnameClient}</p>
                                         <svg className="" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="36" height="36" viewBox="0 0 48 48">
                                             <path fill="#ff9800" d="M32 10A14 14 0 1 0 32 38A14 14 0 1 0 32 10Z"></path>
                                             <path fill="#d50000" d="M16 10A14 14 0 1 0 16 38A14 14 0 1 0 16 10Z"></path>
