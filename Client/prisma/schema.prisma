@@ -15,8 +15,8 @@ datasource db {
 
 model Clients {
     idClient            String @id @default(uuid())
-    firstnameClient     String
     lastnameClient      String
+    firstnameClient     String
     mailClient          String @unique
     phoneNumberClient   Int    @unique
     addressClient       String
