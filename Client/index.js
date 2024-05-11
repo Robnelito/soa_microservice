@@ -7,7 +7,7 @@ const clients = require('./controller/client');
 
 app.use(cors({
   origin: '*',
-  methods: 'GET, POST, PUT, DELETE',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 }));
 
