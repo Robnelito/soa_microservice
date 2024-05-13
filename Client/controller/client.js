@@ -46,10 +46,10 @@ const getClients = async(req, res) => {
     }
 };
 
-const getClientById = async(req, res) => {
-    const clientId = req.params.idClient;
+const getClientByAccount = async(req, res) => {
+    const number = req.params.accountNumberClient;
     try {
-        const client = await prisma.clients.findUnique({ where: { idClient: clientId } });
+        const client = await prisma.clients.findUnique({ where: { accountNumberClient: number } });
         if(!client) {
             res.status(404).json({ error: 'Le client est introuvable' });
         }
@@ -126,7 +126,7 @@ const deleteClient = async(req, res) => {
 module.exports = {
     createClient,
     getClients,
-    getClientById,
+    getClientByAccount,
     updateClient,
     updateClientSolde,
     deleteClient
