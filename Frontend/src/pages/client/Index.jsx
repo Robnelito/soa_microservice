@@ -8,6 +8,7 @@ const Index = () => {
     const [clients, setClient] = useState([]);
     const [search, setSearch] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
+    const [showDelModal, setShowDelModal] = useState(false);
 
     const openAddModal = () => {
         setShowAddModal(true);
@@ -15,6 +16,14 @@ const Index = () => {
 
     const closeAddModal = () => {
         setShowAddModal(false);
+    };
+
+    const openDelModal = (client) => {
+        setShowDelModal(true);
+    };
+
+    const closeDelModal = () => {
+        setShowDelModal(false);
     };
 
     const initialFormState = {
@@ -36,19 +45,21 @@ const Index = () => {
     }, []);
 
     const [formData, setFormData] = useState(initialFormState);
+    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-        axios.post(`${configs.API_GATEWAY_URL}/client/`, formData).then((response) => {
+        if (!validateForm()) {
+            return;
+        }
+        await axios.post(`${configs.API_GATEWAY_URL}/client/`, formData).then((response) => {
             setFormData(initialFormState);
             closeAddModal();
-            setClient(response.data);
-            alert('succes');
+            setClient([...clients, response.data]);
         }).catch((error) => {
             console.error(error);
             alert(error);
@@ -108,6 +119,36 @@ const Index = () => {
         return c;
     }
 
+    const validateForm = () => {
+        const errors = {};
+        if (!formData.firstnameClient.trim()) {
+            errors.firstnameClient = 'Le prénom est requis';
+        }
+        if (!formData.lastnameClient.trim()) {
+            errors.lastnameClient = 'Le nom est requis';
+        }
+        if (!formData.mailClient.trim()) {
+            errors.mailClient = 'L\'adresse e-mail est requise';
+        } else if (!isValidEmail(formData.mailClient)) {
+            errors.mailClient = 'L\'adresse e-mail n\'est pas valide';
+        }
+        if (!formData.phoneNumberClient.trim()) {
+            errors.phoneNumberClient = 'Le numéro de téléphone est requis';
+        }
+        if (!formData.addressClient.trim()) {
+            errors.addressClient = 'L\'adresse est requise';
+        }
+        if (!formData.remnantsClient.trim()) {
+            errors.remnantsClient = 'Le solde est requise';
+        }
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
+    const isValidEmail = (email) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    };
+
     return (
         <>
             <div className='space-x-2 pb-2 flex justify-between'>
@@ -127,30 +168,36 @@ const Index = () => {
                                 <div className='grid grid-cols-2 gap-2 justify-between'>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="lastnameClient">Nom:</label>
-                                        <input type="text" name="lastnameClient" placeholder="Nom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.lastnameClient} onChange={handleChange} required />
+                                        <input type="text" name="lastnameClient" placeholder="Nom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.lastnameClient} onChange={handleChange} autoComplete='off' />
+                                        {errors.lastnameClient && <span className="text-red-600">{errors.lastnameClient}</span>}
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="firstnameClientClient">Prénom:</label>
-                                        <input type="text" name="firstnameClient" placeholder="Prénom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.firstnameClient} onChange={handleChange} required />
+                                        <input type="text" name="firstnameClient" placeholder="Prénom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.firstnameClient} onChange={handleChange} autoComplete='off' />
+                                        {errors.firstnameClient && <span className="text-red-600">{errors.firstnameClient}</span>}
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="mailClient">Adresse e-mail:</label>
-                                        <input type="email" name="mailClient" placeholder="exemple@mail.com" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.mailClient} onChange={handleChange} required />
+                                        <input type="email" name="mailClient" placeholder="exemple@mail.com" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.mailClient} onChange={handleChange} autoComplete='off' />
+                                        {errors.mailClient && <span className="text-red-600">{errors.mailClient}</span>}
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="phoneNumberClient">Numéro de téléhone:</label>
                                         <div className='flex items-center'>
                                             <span className='p-2 border border-slate-300 rounded-l bg-slate-200 text-slate-800'>+261</span>
-                                            <input type="text" name="phoneNumberClient" placeholder="3X XX XXX XX" className='border border-gray-600 p-2 rounded-r w-full focus:ring-1 focus:ring-gray-700' maxLength={9} value={formData.phoneNumberClient} onChange={handleChange} required />
+                                            <input type="text" name="phoneNumberClient" placeholder="3X XX XXX XX" className='border border-gray-600 p-2 rounded-r w-full focus:ring-1 focus:ring-gray-700' maxLength={9} value={formData.phoneNumberClient} onChange={handleChange} autoComplete='off' />
                                         </div>
+                                        {errors.phoneNumberClient && <span className="text-red-600">{errors.phoneNumberClient}</span>}
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="lastnameClient">Adresse:</label>
-                                        <input type="text" name="addressClient" placeholder="Adresse" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.addressClient} onChange={handleChange} required />
+                                        <input type="text" name="addressClient" placeholder="Adresse" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.addressClient} onChange={handleChange} autoComplete='off' />
+                                        {errors.addressClient && <span className="text-red-600">{errors.addressClient}</span>}
                                     </div>
                                     <div className='flex flex-col w-full'>
                                         <label htmlFor="lastnameClient">Solde:</label>
-                                        <input type="text" name="remnantsClient" placeholder="Solde" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.remnantsClient} onChange={handleChange} required />
+                                        <input type="text" name="remnantsClient" placeholder="Solde" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.remnantsClient} onChange={handleChange} autoComplete='off' />
+                                        {errors.remnantsClient && <span className="text-red-600">{errors.remnantsClient}</span>}
                                     </div>
                                 </div>
                                 <div className='flex justify-end space-x-2'>
@@ -164,9 +211,14 @@ const Index = () => {
             )}
             <div className='flex flex-wrap justify-center gap-4'>
                 {
-                    clients && clients.map((content) => (
-                        <>
-                            <div className="bg-gradient-to-br from-gray-800 via-gray-600 to-gray-800 w-80 h-48 p-4 rounded-md shadow shadow-slate-600 transition-all duration-200 hover:scale-105 *:text-white" key={content.idClient}>
+                    clients && clients.filter((index) => {
+                        return search.toLowerCase() === ''
+                            ? index
+                            : index.lastnameClient.toLowerCase().includes(search) ||
+                            index.firstnameClient.toLowerCase().includes(search);
+                    }).map((content) => (
+                        <React.Fragment key={content.idClient}>
+                            <div className="bg-gradient-to-br from-gray-800 via-gray-600 to-gray-800 w-80 h-48 p-4 rounded-md shadow shadow-slate-600 transition-all duration-200 hover:scale-105 *:text-white">
                                 <div className="space-y-1">
                                     <div className='flex justify-between'>
                                         <div className=''>
@@ -179,7 +231,7 @@ const Index = () => {
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button className='hover:bg-red-600 rounded-full p-1' onClick={() => handleDelete(content.idClient)}>
+                                            <button className='hover:bg-red-600 rounded-full p-1' onClick={() => openDelModal(content.idClient)}>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -213,7 +265,27 @@ const Index = () => {
                                     </div>
                                 </div>
                             </div>
-                        </>
+                            {showDelModal && (
+                                <>
+                                    <div className="fixed inset-0 flex items-center justify-center h-screen z-55 bg-gray-800 bg-opacity-30">
+                                    </div>
+                                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                                        <div className="flex justify-center items-center w-[30%]">
+                                            <div className='bg-white w-full p-6 space-y-4 rounded shadow-md shadow-[#26393D]'>
+                                                <h1 className='text-xl uppercase tracking-wide text-gray-900'>Suppression</h1>
+                                                <hr className='border border-gray-500 w-[60%] mx-auto' />
+                                                <p className='text-center text-lg'>Voulez-vous vraiment supprimer ?</p>
+                                                <hr className='border border-gray-500 w-[60%] mx-auto' />
+                                                <div className='space-x-2 flex justify-end'>
+                                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeDelModal}>NON</button>
+                                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={() => { handleDelete(content.idClient), closeDelModal() }}>OUI</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                        </React.Fragment>
                     ))
                 }
             </div >
