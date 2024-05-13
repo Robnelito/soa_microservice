@@ -60,8 +60,8 @@ function MainLayout() {
         <div className={'relative p-4'}>
           {dropdown &&
             <div ref={popupRef} className={'text-sm absolute top-2 right-4'}>
-              <div className={'border rounded-md p-2'}>
-                <div onClick={deconnexion} className={'px-4 py-2 rounded-sm hover:bg-gray-100 cursor-pointer'}>
+              <div className={'border rounded-md p-2 bg-white hover:bg-gray-100'}>
+                <div onClick={deconnexion} className={'px-4 py-2 rounded-sm cursor-pointer'}>
                   Déconnexion
                 </div>
               </div>
