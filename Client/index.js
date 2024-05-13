@@ -17,6 +17,7 @@ app.post('/', clients.createClient);
 app.get('/', clients.getClients);
 app.get('/:idClient', clients.getClientById);
 app.put('/:idClient', clients.updateClient);
+app.put('/solde/:idClient', clients.updateClientSolde);
 app.delete('/:idClient', clients.deleteClient);
 
 app.listen(PORT, () => {
