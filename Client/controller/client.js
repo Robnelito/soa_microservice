@@ -72,12 +72,38 @@ const updateClient = async(req, res) => {
             where: {
                 idClient: clientId
             },
+            orderBy: {
+                lastnameClient: 'asc'
+            },
             data: {
                 lastnameClient,
                 firstnameClient,
                 mailClient,
                 phoneNumberClient: parseInt(phoneNumberClient),
                 addressClient,
+                remnantsClient: parseFloat(remnantsClient)
+            }
+        });
+        res.json(upClient);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const updateClientSolde = async(req, res) => {
+    const clientId = req.params.idClient;
+    const { remnantsClient } = req.body;
+    try {
+        let client = await prisma.clients.findUnique({ where: { idClient: clientId } });
+        if(!client) {
+            res.status(404).json({ error: 'Le client est introuvable' });
+        }
+
+        const upClient = await prisma.clients.update({
+            where: {
+                idClient: clientId
+            },
+            data: {
                 remnantsClient: parseFloat(remnantsClient)
             }
         });
@@ -102,5 +128,6 @@ module.exports = {
     getClients,
     getClientById,
     updateClient,
+    updateClientSolde,
     deleteClient
 }
