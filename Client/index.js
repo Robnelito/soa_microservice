@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 
 app.post('/', clients.createClient);
 app.get('/', clients.getClients);
-app.get('/:idClient', clients.getClientById);
+app.get('/:accountNumberClient', clients.getClientByAccount);
 app.put('/:idClient', clients.updateClient);
 app.put('/solde/:idClient', clients.updateClientSolde);
 app.delete('/:idClient', clients.deleteClient);
