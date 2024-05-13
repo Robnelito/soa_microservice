@@ -9,6 +9,7 @@ const Index = () => {
     const [search, setSearch] = useState('');
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDelModal, setShowDelModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
 
     const openAddModal = () => {
         setShowAddModal(true);
@@ -24,6 +25,14 @@ const Index = () => {
 
     const closeDelModal = () => {
         setShowDelModal(false);
+    };
+
+    const openEditModal = (client) => {
+        setShowEditModal(true);
+    };
+
+    const closeEditModal = () => {
+        setShowEditModal(false);
     };
 
     const initialFormState = {
@@ -201,7 +210,7 @@ const Index = () => {
                                     </div>
                                 </div>
                                 <div className='flex justify-end space-x-2'>
-                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeAddModal}>Annuler</button>
+                                    <button className='bg-slate-300 text-gray-800 py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeAddModal}>Annuler</button>
                                     <button type="submit" className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105'>Valider</button>
                                 </div>
                             </form>
@@ -222,7 +231,7 @@ const Index = () => {
                                 <div className="space-y-1">
                                     <div className='flex justify-between'>
                                         <div className=''>
-                                            <button className='hover:bg-green-600 rounded-full p-1'>
+                                            <button className='hover:bg-green-600 rounded-full p-1' onClick={() => openEditModal(content.idclient)}>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -267,7 +276,7 @@ const Index = () => {
                             </div>
                             {showDelModal && (
                                 <>
-                                    <div className="fixed inset-0 flex items-center justify-center h-screen z-55 bg-gray-800 bg-opacity-30">
+                                    <div className="fixed inset-0 flex items-center justify-center h-screen z-55 bg-gray-800 bg-opacity-50">
                                     </div>
                                     <div className="fixed inset-0 flex items-center justify-center z-50">
                                         <div className="flex justify-center items-center w-[30%]">
@@ -277,10 +286,55 @@ const Index = () => {
                                                 <p className='text-center text-lg'>Voulez-vous vraiment supprimer ?</p>
                                                 <hr className='border border-gray-500 w-[60%] mx-auto' />
                                                 <div className='space-x-2 flex justify-end'>
-                                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeDelModal}>NON</button>
+                                                    <button className='bg-slate-300 text-gray-800 py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeDelModal}>NON</button>
                                                     <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={() => { handleDelete(content.idClient), closeDelModal() }}>OUI</button>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {showEditModal && (
+                                <>
+                                    <div className="fixed inset-0 flex items-center justify-center h-screen z-50 bg-gray-800 bg-opacity-50">
+                                    </div>
+                                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                                        <div className="flex justify-center items-center w-[40%]">
+                                            <form onSubmit={handleSubmit} className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
+                                                <div className='grid grid-cols-2 gap-2 justify-between'>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="lastnameClient">Nom:</label>
+                                                        <input type="text" name="lastnameClient" placeholder="Nom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.lastnameClient} onChange={handleChange} autoComplete='off' />
+                                                    </div>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="firstnameClientClient">Prénom:</label>
+                                                        <input type="text" name="firstnameClient" placeholder="Prénom" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.firstnameClient} onChange={handleChange} autoComplete='off' />
+                                                    </div>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="mailClient">Adresse e-mail:</label>
+                                                        <input type="email" name="mailClient" placeholder="exemple@mail.com" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.mailClient} onChange={handleChange} autoComplete='off' />
+                                                    </div>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="phoneNumberClient">Numéro de téléhone:</label>
+                                                        <div className='flex items-center'>
+                                                            <span className='p-2 border border-slate-300 rounded-l bg-slate-200 text-slate-800'>+261</span>
+                                                            <input type="text" name="phoneNumberClient" placeholder="3X XX XXX XX" className='border border-gray-600 p-2 rounded-r w-full focus:ring-1 focus:ring-gray-700' maxLength={9} value={formData.phoneNumberClient} onChange={handleChange} autoComplete='off' />
+                                                        </div>
+                                                    </div>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="lastnameClient">Adresse:</label>
+                                                        <input type="text" name="addressClient" placeholder="Adresse" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.addressClient} onChange={handleChange} autoComplete='off' />
+                                                    </div>
+                                                    <div className='flex flex-col w-full'>
+                                                        <label htmlFor="lastnameClient">Solde:</label>
+                                                        <input type="text" name="remnantsClient" placeholder="Solde" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.remnantsClient} onChange={handleChange} autoComplete='off' />
+                                                    </div>
+                                                </div>
+                                                <div className='flex justify-end space-x-2'>
+                                                    <button className='bg-slate-300 text-gray-800 py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeEditModal}>Annuler</button>
+                                                    <button type="submit" className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105'>Valider</button>
+                                                </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </>
