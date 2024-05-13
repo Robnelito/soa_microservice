@@ -10,6 +10,20 @@ const Index = () => {
     const [showAddModal, setShowAddModal] = useState(false);
     const [showDelModal, setShowDelModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showCashModal, setShowCashModal] = useState(false);
+    const [clientId, setClientId] = useState(null);
+
+    const initialFormState = {
+        lastnameClient: '',
+        firstnameClient: '',
+        mailClient: '',
+        phoneNumberClient: '',
+        addressClient: '',
+        remnantsClient: ''
+    }
+
+    const [formData, setFormData] = useState(initialFormState);
+    const [errors, setErrors] = useState({});
 
     const openAddModal = () => {
         setShowAddModal(true);
@@ -28,6 +42,15 @@ const Index = () => {
     };
 
     const openEditModal = (client) => {
+        setClientId(client.idClient);
+        setFormData({
+            lastnameClient: client.lastnameClient,
+            firstnameClient: client.firstnameClient,
+            mailClient: client.mailClient,
+            phoneNumberClient: client.phoneNumberClient,
+            addressClient: client.addressClient,
+            remnantsClient: client.remnantsClient
+        });
         setShowEditModal(true);
     };
 
@@ -35,14 +58,13 @@ const Index = () => {
         setShowEditModal(false);
     };
 
-    const initialFormState = {
-        lastnameClient: '',
-        firstnameClient: '',
-        mailClient: '',
-        phoneNumberClient: '',
-        addressClient: '',
-        remnantsClient: ''
-    }
+    const openCashModal = () => {
+        setShowCashModal(true);
+    };
+
+    const closeCashModal = () => {
+        setShowCashModal(false);
+    };
 
     useEffect(() => {
         axios.get(`${configs.API_GATEWAY_URL}/client/`).then((response) => {
@@ -52,9 +74,6 @@ const Index = () => {
             console.error(error);
         })
     }, []);
-
-    const [formData, setFormData] = useState(initialFormState);
-    const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -73,6 +92,20 @@ const Index = () => {
             console.error(error);
             alert(error);
         })
+    };
+
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        await axios.put(`${configs.API_GATEWAY_URL}/client/${clientId}`, formData)
+            .then((response) => {
+                setFormData(initialFormState);
+                setClient([...clients]);
+                closeEditModal();
+            })
+            .catch((error) => {
+                console.error(error);
+                alert(error);
+            });
     };
 
     const handleDelete = (clientId) => {
@@ -230,8 +263,8 @@ const Index = () => {
                             <div className="bg-gradient-to-br from-gray-800 via-gray-600 to-gray-800 w-80 h-48 p-4 rounded-md shadow shadow-slate-600 transition-all duration-200 hover:scale-105 *:text-white">
                                 <div className="space-y-1">
                                     <div className='flex justify-between'>
-                                        <div className=''>
-                                            <button className='hover:bg-green-600 rounded-full p-1' onClick={() => openEditModal(content.idclient)}>
+                                        <div className='space-x-1'>
+                                            <button className='hover:bg-green-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={() => openEditModal(content)} title='Modifier'>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -240,12 +273,21 @@ const Index = () => {
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button className='hover:bg-red-600 rounded-full p-1' onClick={() => openDelModal(content.idClient)}>
+                                            <button className='hover:bg-red-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={() => openDelModal(content.idClient)} title='Supprimer'>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
                                                         <path d="M14 9.5C14 9.5 14.5 10.5 14.5 12.5C14.5 14.5 14 15.5 14 15.5M10 9.5C10 9.5 9.5 10.5 9.5 12.5C9.5 14.5 10 15.5 10 15.5M5.99999 6C5.99999 11.8587 4.63107 20 12 20C19.3689 20 18 11.8587 18 6M4 6H20M15 6V5C15 3.22496 13.3627 3 12 3C10.6373 3 9 3.22496 9 5V6" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                            <button className='hover:bg-yellow-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={openCashModal} title='Payer'>
+                                                <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path d="M12 16H13C13.6667 16 15 15.6 15 14C15 12.4 13.6667 12 13 12H11C10.3333 12 9 11.6 9 10C9 8.4 10.3333 8 11 8H12M12 16H9M12 16V18M15 8H12M12 8V6M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#ccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                                     </g>
                                                 </svg>
                                             </button>
@@ -300,7 +342,7 @@ const Index = () => {
                                     </div>
                                     <div className="fixed inset-0 flex items-center justify-center z-50">
                                         <div className="flex justify-center items-center w-[40%]">
-                                            <form onSubmit={handleSubmit} className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
+                                            <form onSubmit={handleEditSubmit} className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
                                                 <div className='grid grid-cols-2 gap-2 justify-between'>
                                                     <div className='flex flex-col w-full'>
                                                         <label htmlFor="lastnameClient">Nom:</label>
@@ -335,6 +377,22 @@ const Index = () => {
                                                     <button type="submit" className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105'>Valider</button>
                                                 </div>
                                             </form>
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+                            {showCashModal && (
+                                <>
+                                    <div className="fixed inset-0 flex items-center justify-center h-screen z-50 bg-gray-800 bg-opacity-50">
+                                    </div>
+                                    <div className="fixed inset-0 flex items-center justify-center z-50">
+                                        <div className="flex justify-center items-center w-[40%]">
+                                            <div className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
+                                                <span>Paiement</span>
+                                                <div className='flex justify-end space-x-2'>
+                                                    <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeCashModal}>Fermer</button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </>
