@@ -72,9 +72,6 @@ const updateClient = async(req, res) => {
             where: {
                 idClient: clientId
             },
-            orderBy: {
-                lastnameClient: 'asc'
-            },
             data: {
                 lastnameClient,
                 firstnameClient,
