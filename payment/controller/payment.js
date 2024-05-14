@@ -7,7 +7,11 @@ const config = require('../config.json');
 
 const getPayment = async(req, res) => {
     try {
-        const payments = await prisma.payments.findMany();
+        const payments = await prisma.payments.findMany({
+            orderBy : {
+                dateVirement : "desc"
+            }
+        });
         res.json(payments);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -43,10 +47,9 @@ const updateSoldeClient = async (req, res) => {
     
     try {
         const client = await axios.get(`${config.API_HOST}/client/${accountNumberClient}`);
-        console.log(client.data);
         client.data.remnantsClient = client.data.remnantsClient + parseFloat(virement);
         
-        const update = await axios.put(`${config.API_HOST}/client/${accountNumberClient}`, client.data);
+        const update = await axios.put(`${config.API_HOST}/client/solde/${accountNumberClient}`, client.data);
 
         if(update){
             try {
@@ -54,6 +57,7 @@ const updateSoldeClient = async (req, res) => {
                     data: {
                         idPaiement : uuidv4(),
                         accountNumberClient : accountNumberClient,
+                        firstNameClient : client.data.firstNameClient,
                         montantVirement: parseFloat(virement),
                         dateVirement: new Date(),
                     }

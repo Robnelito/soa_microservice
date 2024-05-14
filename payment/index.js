@@ -12,7 +12,7 @@ app.use(cors({
 }));
 
 app.use(bodyParser.json());
-app.post('/', payment.getPayment);
+app.get('/', payment.getPayment);
 app.post('/updateSoldeClient', payment.updateSoldeClient);
 
 app.get('/:paymentId', payment.getPaymentById);
