@@ -63,14 +63,17 @@ const updateSoldeClient = async (req, res) => {
                     }
                 });
             } catch (error) {
-                res.status(500).json({error: error.message});
+                res.json({error: error.message, type: 'update error'});
+                return
             }
         }
 
-        res.status(200).json(update.data);
+        res.json(update.data);
+        return
 
     } catch (error) {
-        res.status(500).json({error: error.message});
+        res.json({error: error.message , type: 'update first'});
+        return
     }
 }
 module.exports = {
