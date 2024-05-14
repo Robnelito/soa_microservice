@@ -101,7 +101,7 @@ const Index = () => {
                             </>
                         ))
                     ) : (
-                        <td colSpan={7} className='text-center border border-slate-300 p-3 text-gray-600'>Aucune transaction</td>
+                        <td colSpan={7} className='text-center border border-slate-300 p-3 rounded-md text-gray-600'>Aucune transaction</td>
                     )}
                 </tbody>
             </table>
