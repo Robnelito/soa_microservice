@@ -16,7 +16,7 @@ datasource db {
 model Payments {
   idPaiement          String   @id @default(uuid())
   accountNumberClient String
-  firstNameClient     String
+  firstnameClient     String
   montantVirement     Float
   dateVirement        DateTime
 }

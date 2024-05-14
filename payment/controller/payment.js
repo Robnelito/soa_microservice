@@ -59,7 +59,7 @@ const updateSoldeClient = async (req, res) => {
                     data: {
                         idPaiement : uuidv4(),
                         accountNumberClient : accountNumberClient,
-                        firstNameClient : client.data.firstnameClient,
+                        firstnameClient : client.data.firstnameClient,
                         montantVirement: parseFloat(virement),
                         dateVirement: new Date(),
                     }
