@@ -68,7 +68,7 @@ const Index = () => {
                         <th className='space-x-2 w-[50px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>N°</th>
                         <th className='space-x-2 w-[300px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Numéros de compte</th>
                         <th className='space-x-2 w-[300px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Prénoms</th>
-                        <th className='space-x-2 w-[300px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Somme</th>
+                        <th className='space-x-2 w-[200px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Somme</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Date</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Heure</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Action</th>
@@ -81,7 +81,7 @@ const Index = () => {
                                 <tr className='z-1 w-[100%] space-x-8 h-[50px] place-items-center px-4 rounded-md'>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{index + 1}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.accountNumberClient}</td>
-                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>Ando</td>
+                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.firstNameClient}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.montantVirement}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatDate(payment.dateVirement)}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatHeure(payment.dateVirement)}</td>
@@ -100,7 +100,9 @@ const Index = () => {
                                 </tr>
                             </>
                         ))
-                    ) : ""}
+                    ) : (
+                        <td colSpan={7} className='text-center border border-slate-300 p-3 text-gray-600'>Aucune transaction</td>
+                    )}
                 </tbody>
             </table>
 
