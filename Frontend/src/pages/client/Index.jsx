@@ -25,8 +25,8 @@ const Index = () => {
     }
 
     const initialFormVirementState = {
-        virement : '',
-        accountNumberClient : ''
+        virement: '',
+        accountNumberClient: ''
     }
 
     const [formData, setFormData] = useState(initialFormState);
@@ -91,16 +91,16 @@ const Index = () => {
 
     const handleChangeVirement = (e) => {
 
-        setFormDataVirement({ 
-            ...formDataVirement, 
+        setFormDataVirement({
+            ...formDataVirement,
             ['virement']: e.target.value,
             ['accountNumberClient']: numeroAccount
-         });
+        });
     }
 
     const handleSubmitVirement = async (e) => {
         e.preventDefault();
-        
+
         if (!validateFormVirement()) {
             return;
         }
@@ -108,7 +108,7 @@ const Index = () => {
         await axios.post(`${configs.API_GATEWAY_URL}/payment/updateSoldeClient`, formDataVirement).then((response) => {
             setFormDataVirement(initialFormVirementState);
             closeCashModal();
-            setDataChanged(!dataChanged)
+            setDataChanged(!dataChanged);
         }).catch((error) => {
             console.error(error);
             alert(error);
@@ -136,6 +136,7 @@ const Index = () => {
             .then((response) => {
                 setFormData(initialFormState);
                 setClient([...clients]);
+                setDataChanged(!dataChanged);
                 closeEditModal();
             })
             .catch((error) => {
@@ -327,7 +328,7 @@ const Index = () => {
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button className='hover:bg-yellow-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={ () => openCashModal(content.accountNumberClient)} title='Payer'>
+                                            <button className='hover:bg-yellow-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={() => openCashModal(content.accountNumberClient)} title='Payer'>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -437,14 +438,14 @@ const Index = () => {
                                                 <hr />
                                                 <div className='space-y-2'>
                                                     <label htmlFor="virement">Somme à verser : </label>
-                                                    <input 
-                                                    type="text" 
-                                                    name="virement" 
-                                                    placeholder="....." 
-                                                    value={formDataVirement.virement} 
-                                                    onChange={handleChangeVirement} 
-                                                    autoComplete='off' 
-                                                    className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' 
+                                                    <input
+                                                        type="text"
+                                                        name="virement"
+                                                        placeholder="....."
+                                                        value={formDataVirement.virement}
+                                                        onChange={handleChangeVirement}
+                                                        autoComplete='off'
+                                                        className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700'
                                                     />
                                                     {errors.virement && <span className="text-red-600">{errors.virement}</span>}
                                                 </div>
