@@ -88,17 +88,17 @@ const updateClient = async(req, res) => {
 };
 
 const updateClientSolde = async(req, res) => {
-    const number = req.params.accountNumberClient;
+    const numberAccount = req.params.accountNumberClient;
     const { remnantsClient } = req.body;
     try {
-        let client = await prisma.clients.findUnique({ where: { accountNumberClient: number } });
+        let client = await prisma.clients.findUnique({ where: { accountNumberClient: numberAccount } });
         if(!client) {
             res.status(404).json({ error: 'Le client est introuvable' });
         }
 
         const upClient = await prisma.clients.update({
             where: {
-                accountNumberClient: number
+                accountNumberClient: numberAccount
             },
             data: {
                 remnantsClient: parseFloat(remnantsClient)
