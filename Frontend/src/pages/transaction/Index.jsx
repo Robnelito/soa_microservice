@@ -81,7 +81,7 @@ const Index = () => {
                                 <tr className='z-1 w-[100%] space-x-8 h-[50px] place-items-center px-4 rounded-md'>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{index + 1}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.accountNumberClient}</td>
-                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.firstNameClient}</td>
+                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.firstnameClient}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.montantVirement}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatDate(payment.dateVirement)}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatHeure(payment.dateVirement)}</td>
