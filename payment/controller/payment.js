@@ -51,17 +51,20 @@ const updateSoldeClient = async (req, res) => {
         
         const update = await axios.put(`${config.API_HOST}/client/solde/${accountNumberClient}`, client.data);
 
-        if(update){
+        console.log(update.data);
+        if(update.data){
             try {
-                const newPayment = await prisma.payments.create({
+                console.log('add transaction');
+                await prisma.payments.create({
                     data: {
                         idPaiement : uuidv4(),
                         accountNumberClient : accountNumberClient,
-                        firstNameClient : client.data.firstNameClient,
+                        firstNameClient : client.data.firstnameClient,
                         montantVirement: parseFloat(virement),
                         dateVirement: new Date(),
                     }
                 });
+                console.log('hello' + newPayment);
             } catch (error) {
                 res.json({error: error.message, type: 'update error'});
                 return
