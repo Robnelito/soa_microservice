@@ -11,7 +11,9 @@ const Index = () => {
     const [showDelModal, setShowDelModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showCashModal, setShowCashModal] = useState(false);
+    const [dataChanged, setDataChanged] = useState(false);
     const [clientId, setClientId] = useState(null);
+    const [numeroAccount, setNumeroAccount] = useState(null);
 
     const initialFormState = {
         lastnameClient: '',
@@ -22,7 +24,13 @@ const Index = () => {
         remnantsClient: ''
     }
 
+    const initialFormVirementState = {
+        virement : '',
+        accountNumberClient : ''
+    }
+
     const [formData, setFormData] = useState(initialFormState);
+    const [formDataVirement, setFormDataVirement] = useState(initialFormVirementState);
     const [errors, setErrors] = useState({});
 
     const openAddModal = () => {
@@ -58,8 +66,10 @@ const Index = () => {
         setShowEditModal(false);
     };
 
-    const openCashModal = () => {
+    const openCashModal = (client) => {
         setShowCashModal(true);
+        setNumeroAccount(client)
+        console.log(client)
     };
 
     const closeCashModal = () => {
@@ -73,10 +83,36 @@ const Index = () => {
         }).catch((error) => {
             console.error(error);
         })
-    }, []);
+    }, [dataChanged]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleChangeVirement = (e) => {
+
+        setFormDataVirement({ 
+            ...formDataVirement, 
+            ['virement']: e.target.value,
+            ['accountNumberClient']: numeroAccount
+         });
+    }
+
+    const handleSubmitVirement = async (e) => {
+        e.preventDefault();
+        
+        if (!validateFormVirement()) {
+            return;
+        }
+
+        await axios.post(`${configs.API_GATEWAY_URL}/payment/updateSoldeClient`, formDataVirement).then((response) => {
+            setFormDataVirement(initialFormVirementState);
+            closeCashModal();
+            setDataChanged(!dataChanged)
+        }).catch((error) => {
+            console.error(error);
+            alert(error);
+        })
     };
 
     const handleSubmit = async (e) => {
@@ -187,6 +223,15 @@ const Index = () => {
         return Object.keys(errors).length === 0;
     };
 
+    const validateFormVirement = () => {
+        const errors = {};
+        if (!formDataVirement.virement.trim()) {
+            errors.virement = 'La somme est requise';
+        }
+        setErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
+
     const isValidEmail = (email) => {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     };
@@ -282,7 +327,7 @@ const Index = () => {
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button className='hover:bg-yellow-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={openCashModal} title='Payer'>
+                                            <button className='hover:bg-yellow-600 rounded-full p-1 shadow-inner shadow-slate-500' onClick={ () => openCashModal(content.accountNumberClient)} title='Payer'>
                                                 <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -388,9 +433,24 @@ const Index = () => {
                                     <div className="fixed inset-0 flex items-center justify-center z-50">
                                         <div className="flex justify-center items-center w-[40%]">
                                             <div className="space-y-2 bg-[#fff] p-10 w-full rounded shadow-md shadow-[#26393D]">
-                                                <span>Paiement</span>
+                                                <span className='font-bold'>Paiement</span>
+                                                <hr />
+                                                <div className='space-y-2'>
+                                                    <label htmlFor="virement">Somme à verser : </label>
+                                                    <input 
+                                                    type="text" 
+                                                    name="virement" 
+                                                    placeholder="....." 
+                                                    value={formDataVirement.virement} 
+                                                    onChange={handleChangeVirement} 
+                                                    autoComplete='off' 
+                                                    className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' 
+                                                    />
+                                                    {errors.virement && <span className="text-red-600">{errors.virement}</span>}
+                                                </div>
                                                 <div className='flex justify-end space-x-2'>
                                                     <button className='bg-gray-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeCashModal}>Fermer</button>
+                                                    <button className='bg-green-700 text-white py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={handleSubmitVirement}>Enregistrer</button>
                                                 </div>
                                             </div>
                                         </div>
