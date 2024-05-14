@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode"
 
@@ -54,6 +54,10 @@ function MainLayout() {
       <div
         className={'text-sm h-16 w-full fixed top-0 left-0 flex place-items-center justify-between px-4 border-b'}>
         <div className={'font-black text-xl'}>APP</div>
+        <div className="space-x-4 p-2">
+          <Link to={"/dashboard/client"} className="uppercase font-bold tracking-wide">Client</Link>
+          <Link to={"/dashboard/paiement"} className="uppercase font-bold tracking-wide">Paiement</Link>
+        </div>
         <div
           onClick={() => setDropdown(!dropdown)}
           className={'relative transition-all duration-500 space-x-1 py-2 px-4 rounded-md cursor-pointer hover:bg-gray-100'}>
