@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import configs from '../../../config'
+import { Toaster, toast } from 'sonner'
 
 const Index = () => {
     const [clients, setClient] = useState([]);
@@ -109,6 +110,7 @@ const Index = () => {
             setFormDataVirement(initialFormVirementState);
             closeCashModal();
             setDataChanged(!dataChanged);
+            toast.success('Le solde du client vient d\'être modifié !');
         }).catch((error) => {
             console.error(error);
             alert(error);
@@ -124,6 +126,7 @@ const Index = () => {
             setFormData(initialFormState);
             closeAddModal();
             setClient([...clients, response.data]);
+            toast.success('Client ajouté avec succès !');
         }).catch((error) => {
             console.error(error);
             alert(error);
@@ -138,16 +141,18 @@ const Index = () => {
                 setClient([...clients]);
                 setDataChanged(!dataChanged);
                 closeEditModal();
+                toast.success('Client modifié avec succès !');
             })
             .catch((error) => {
                 console.error(error);
                 alert(error);
             });
-    };
-
-    const handleDelete = (clientId) => {
-        axios.delete(`${configs.API_GATEWAY_URL}/client/${clientId}`).then(() => {
-            setClient(clients.filter(client => client.idClient !== clientId));
+        };
+        
+        const handleDelete = (clientId) => {
+            axios.delete(`${configs.API_GATEWAY_URL}/client/${clientId}`).then(() => {
+                setClient(clients.filter(client => client.idClient !== clientId));
+                toast.success('Client supprimé avec succès !');
         }).catch((error) => {
             console.error(error);
         })
@@ -458,6 +463,7 @@ const Index = () => {
                     ))
                 }
             </div >
+            <Toaster position="bottom-center" />
         </>
     )
 }
