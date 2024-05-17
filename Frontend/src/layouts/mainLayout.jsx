@@ -1,6 +1,7 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { jwtDecode } from "jwt-decode"
+import logo from '../assets/image/logo.png'
 
 function MainLayout() {
   const navigate = useNavigate()
@@ -53,7 +54,9 @@ function MainLayout() {
     <>
       <div
         className={'text-sm h-16 w-full fixed top-0 left-0 flex place-items-center justify-between px-4 border-b'}>
-        <div className={'font-black text-xl'}>APP</div>
+        <div className={'font-black text-xl'}>
+          <img src={logo} alt="" className="w-8" />
+        </div>
         <div className="space-x-4 p-2">
           <Link to={"/dashboard/client"} className="uppercase font-bold tracking-wide">Client</Link>
           <Link to={"/dashboard/paiement"} className="uppercase font-bold tracking-wide">Paiement</Link>
