@@ -37,9 +37,13 @@ const createClient = async(req, res) => {
     }
 };
 
-const getClients = async(req, res) => {
+const getClients = async (req, res) => {
     try {
-        const clients = await prisma.clients.findMany();
+        const clients = await prisma.clients.findMany({
+            orderBy: {
+                lastnameClient: 'asc',  // Tri ascendant par lastnameClient
+            },
+        });
         res.json(clients);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -61,7 +65,7 @@ const getClientByAccount = async(req, res) => {
 
 const updateClient = async(req, res) => {
     const clientId = req.params.idClient;
-    const { firstnameClient, lastnameClient, mailClient, phoneNumberClient, addressClient, remnantsClient } = req.body;
+    const { firstnameClient, lastnameClient, mailClient, phoneNumberClient, addressClient } = req.body;
     try {
         let client = await prisma.clients.findUnique({ where: { idClient: clientId } });
         if(!client) {
@@ -78,7 +82,6 @@ const updateClient = async(req, res) => {
                 mailClient,
                 phoneNumberClient: parseInt(phoneNumberClient),
                 addressClient,
-                remnantsClient: parseFloat(remnantsClient)
             }
         });
         res.json(upClient);
