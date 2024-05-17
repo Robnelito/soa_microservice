@@ -54,7 +54,7 @@ function MainLayout() {
     <>
       <div
         className={'text-sm h-16 w-full fixed top-0 left-0 flex place-items-center justify-between px-4 border-b'}>
-        <div className={'font-black text-xl'}>
+        <div className={'font-black text-xl p-4'}>
           <img src={logo} alt="" className="w-8" />
         </div>
         <div className="space-x-4 p-2">
