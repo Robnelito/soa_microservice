@@ -413,10 +413,6 @@ const Index = () => {
                                                         <label htmlFor="lastnameClient">Adresse:</label>
                                                         <input type="text" name="addressClient" placeholder="Adresse" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.addressClient} onChange={handleChange} autoComplete='off' />
                                                     </div>
-                                                    <div className='flex flex-col w-full'>
-                                                        <label htmlFor="lastnameClient">Solde:</label>
-                                                        <input type="text" name="remnantsClient" placeholder="Solde" className='border border-gray-600 p-2 rounded w-full focus:ring-1 focus:ring-gray-700' value={formData.remnantsClient} onChange={handleChange} autoComplete='off' />
-                                                    </div>
                                                 </div>
                                                 <div className='flex justify-end space-x-2'>
                                                     <button className='bg-slate-300 text-gray-800 py-2 px-2 rounded transition-all duration-300 hover:scale-105' onClick={closeEditModal}>Annuler</button>
