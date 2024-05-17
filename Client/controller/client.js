@@ -41,7 +41,7 @@ const getClients = async (req, res) => {
     try {
         const clients = await prisma.clients.findMany({
             orderBy: {
-                lastnameClient: 'asc',  // Tri ascendant par lastnameClient
+                lastnameClient: 'asc',
             },
         });
         res.json(clients);
