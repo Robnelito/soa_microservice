@@ -29,18 +29,13 @@ const Index = () => {
         const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
 
         return formattedDate;
-    };
+    }
 
     function formatHeure(inputDate) {
-        const heurePlus = inputDate.split("T");
-        const heure = heurePlus[1].split(".");
-        const minute1 = heure[0].split(":")[0];
-        const minute2 = heure[0].split(":")[1];
-
-        const formattedDate = `${minute1}:${minute2}`;
-
-        return formattedDate;
-    };
+        const dateObj = new Date(inputDate);
+        const localTime = dateObj.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+        return localTime;
+    }
 
     const handleDelete = () => {
         axios.delete(`${configs.API_GATEWAY_URL}/payment/${paymentId}`).then((response) => {
@@ -60,6 +55,51 @@ const Index = () => {
         setPaymentId(null);
     };
 
+    function nbr(a, b) {
+        a = '' + a;
+        b = b || ' ';
+        var c = '',
+            d = 0;
+        while (a.match(/^0[0-9]/)) {
+            a = a.substr(1);
+        }
+        for (var i = a.length - 1; i >= 0; i--) {
+            c = (d !== 1 && d % 3 === 0) ? a[i] + b + c : a[i] + c;
+            d++;
+        }
+        return c;
+    }
+
+    function nbr1(a, b) {
+        a = '' + a;
+        b = b || ' ';
+        var c = '',
+            d = 0;
+        while (a.match(/^0[0-9]/)) {
+            a = a.substr(1);
+        }
+        for (var i = a.length - 1; i >= 0; i--) {
+            c = (d == 0 && d % 2 == 0) ? a[i] + b + c : a[i] + c;
+            d++;
+        }
+        return c;
+    }
+
+    function nbr2(a, b) {
+        a = '' + a;
+        b = b || ' ';
+        var c = '',
+            d = 0;
+        while (a.match(/^0[0-9]/)) {
+            a = a.substr(1);
+        }
+        for (var i = a.length - 1; i >= 0; i--) {
+            c = (d !== 0 && d % 5 === 0) ? a[i] + b + c : a[i] + c;
+            d++;
+        }
+        return c;
+    }
+
     return (
         <div className='relative mt-5'>
             <table className='table-fixed w-[100%] 2xl:w-[100%] border-separate'>
@@ -68,7 +108,7 @@ const Index = () => {
                         <th className='space-x-2 w-[50px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>N°</th>
                         <th className='space-x-2 w-[300px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Numéros de compte</th>
                         <th className='space-x-2 w-[300px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Prénoms</th>
-                        <th className='space-x-2 w-[200px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Somme</th>
+                        <th className='space-x-2 w-[200px] border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Somme (MGA)</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Date</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Heure</th>
                         <th className='space-x-2 w-[150px] place-items-center border border-slate-600 rounded-md text-slate-50 uppercase tracking-wider'>Action</th>
@@ -80,9 +120,9 @@ const Index = () => {
                             <>
                                 <tr className='z-1 w-[100%] space-x-8 h-[50px] place-items-center px-4 rounded-md'>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{index + 1}</td>
-                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.accountNumberClient}</td>
+                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{nbr(nbr2(payment.accountNumberClient))}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.firstnameClient}</td>
-                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.montantVirement}</td>
+                                    <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{payment.montantVirement.toLocaleString("de-DE")}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatDate(payment.dateVirement)}</td>
                                     <td className='text-center space-x-2 w-[300px] border border-slate-300 rounded-md space-y-4'>{formatHeure(payment.dateVirement)}</td>
                                     <td className='text-center space-x-2 w-[150px] border border-slate-300 rounded-md'>
