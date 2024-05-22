@@ -1,34 +1,47 @@
-#!/bin/bash
+@echo off
 
-echo "Installing dependencies in Api_gateway..."
+echo --------------------------------------------
+echo Installing dependencies in Api_gateway...
 cd Api_gateway
-npm install
+call npm i
 cd ..
 
-echo "Installing dependencies in User..."
+echo --------------------------------------------
+echo Installing dependencies in User...
 cd User
-npm install
-npx prisma db push
-npx prisma generate
+call npm i
+echo --------------------------------------------
+echo Init DB User...
+call npx prisma db push
+call npx prisma generate
 cd ..
 
-echo "Installing dependencies in Client..."
+echo --------------------------------------------
+echo Installing dependencies in Client...
 cd Client
-npm install
-npx prisma db push
-npx prisma generate
+call npm i
+echo --------------------------------------------
+echo Init DB User...
+call npx prisma db push
+call npx prisma generate
 cd ..
 
-echo "Installing dependencies in payment..."
+echo --------------------------------------------
+echo Installing dependencies in payment...
 cd payment
-npm install
-npx prisma db push
-npx prisma generate
+call npm i
+echo --------------------------------------------
+echo Init DB payment...
+call npx prisma db push
+call npx prisma generate
 cd ..
 
-echo "Installing dependencies in Frontend..."
+echo --------------------------------------------
+echo Installing dependencies in Frontend...
 cd Frontend
-npm install
+call npm i
 cd ..
 
-echo "All dependencies installed and databases initialized successfully."
+echo --------------------------------------------
+echo All dependencies installed and databases initialized successfully.
+pause
